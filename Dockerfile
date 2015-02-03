@@ -16,18 +16,6 @@ RUN apt-get install -qy \
     php5-fpm \
     nginx
 
-#################################
-#### install drush 7
-# Install composer
-RUN \  
-    apt-get install -qy curl && \
-    curl -sS https://getcomposer.org/installer | php && \
-    mv composer.phar /usr/local/bin/composer
-# and drush
-RUN \
-    composer global require drush/drush:dev-master && \
-    ln -sf /root/.composer/vendor/drush/drush/drush /usr/bin/drush
-
 ################################
 ### Set config files and services for autorun
 # install custom config files
