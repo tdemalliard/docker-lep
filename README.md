@@ -1,2 +1,2 @@
-dockerized drupal SDAS
-Load a backup and run the server with it.
+LEMP server :
+linux ubuntu nginx (engine X) mariadb php-fpm
