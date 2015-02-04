@@ -1,2 +1,2 @@
 #!/bin/sh
-exec /usr/sbin/mysqld
+exec /usr/sbin/mysqld --skip-grant-tables

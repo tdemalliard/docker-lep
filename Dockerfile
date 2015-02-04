@@ -3,18 +3,28 @@
 FROM tdemalliard/baseimage:0.9.16
 MAINTAINER Thibault de Malliard <tdemalliard+docker@gmail.com>
 
-# Set correct environment variables.
-ENV HOME /root
-
 ##############################
 ### install the servers nginx, mariadb, php-fpm
-RUN apt-get install -qy \
-    mariadb-server \
+RUN DEBIAN_FRONTEND='noninteractive' \
+    apt-get install -qy \
     php5 php5-cli \
     php5-mysql \
     php5-gd \
     php5-fpm \
     nginx
+
+# install mariad
+# touch file: avoid bug
+RUN mkdir -p /var/lib/mysql && \
+    touch /var/lib/mysql/debian-5.5.flag && \
+    DEBIAN_FRONTEND='noninteractive' \
+    apt-get install -qy \
+    mariadb-server
+
+# tweaks for mysql:
+RUN mkdir /run/mysqld
+RUN chown mysql:root /run/mysqld
+
 
 ################################
 ### Set config files and services for autorun
