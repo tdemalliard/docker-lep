@@ -1,10 +1,11 @@
 #####################
 ### init
-FROM tdemalliard/baseimage:0.9.16
+FROM tdemalliard/baseimage:0.9.16.0
 MAINTAINER Thibault de Malliard <tdemalliard+docker@gmail.com>
 
 ##############################
 ### install the servers nginx, mariadb, php-fpm
+# install php5-fpm and nginx
 RUN DEBIAN_FRONTEND='noninteractive' \
     apt-get install -qy \
     php5 php5-cli \
@@ -14,16 +15,21 @@ RUN DEBIAN_FRONTEND='noninteractive' \
     nginx
 
 # install mariad
-# touch file: avoid bug
+# touch file: workaround install bug
 RUN mkdir -p /var/lib/mysql && \
     touch /var/lib/mysql/debian-5.5.flag && \
     DEBIAN_FRONTEND='noninteractive' \
     apt-get install -qy \
     mariadb-server
 
-# tweaks for mysql:
-RUN mkdir /run/mysqld
-RUN chown mysql:root /run/mysqld
+# workaround to run mysql: missing socket folder
+RUN mkdir /run/mysqld && \
+    chown mysql:root /run/mysqld
+
+# install sendmail
+RUN apt-get install -qy \
+    sendmail && \
+    sendmailconfig
 
 
 ################################
@@ -37,11 +43,12 @@ ADD www.conf /etc/php5/fpm/pool.d/www.conf
 ADD mysqld.service /etc/service/mysqld/run
 ADD php-fpm.service /etc/service/php-fpm/run
 ADD nginx.service /etc/service/nginx/run
+ADD sendmail.service /etc/service/sendmail/run
 
-################################
-### End config
-# expose nginx
-EXPOSE 80
+#################################
+### cleaning
+RUN rm -rf /tmp/* && \
+    apt-get clean -y
 
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
