@@ -44,10 +44,6 @@ ADD mysqld.service /etc/service/mysqld/run
 ADD php-fpm.service /etc/service/php-fpm/run
 ADD nginx.service /etc/service/nginx/run
 
-# sendmail allow www-data user to send mails
-RUN sed -i 's/#Ft\/etc\/mail\/trusted-users/Ft\/etc\/mail\/trusted-users/' /etc/mail/submit.cf && \
-    echo 'www-data' >> /etc/mail/trusted-users
-
 #################################
 ### cleaning
 RUN rm -rf /tmp/* && \
