@@ -1,6 +1,6 @@
 #####################
 ### init
-FROM tdemalliard/baseimage:0.9.16.0
+FROM tdemalliard/baseimage:0.9.17
 MAINTAINER Thibault de Malliard <tdemalliard+docker@gmail.com>
 
 ##############################
