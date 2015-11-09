@@ -26,11 +26,11 @@ RUN mkdir -p /var/lib/mysql && \
 RUN mkdir /run/mysqld && \
     chown mysql:root /run/mysqld
 
-# install sendmail
-RUN apt-get install -qy \
-    sendmail && \
-    sendmailconfig
 
+# install ssmtp
+RUN apt-get install -qy \
+    ssmtp
+ADD ssmtp.conf /etc/ssmtp/ssmtp.conf
 
 ################################
 ### Set config files and services for autorun
@@ -43,7 +43,6 @@ ADD www.conf /etc/php5/fpm/pool.d/www.conf
 ADD mysqld.service /etc/service/mysqld/run
 ADD php-fpm.service /etc/service/php-fpm/run
 ADD nginx.service /etc/service/nginx/run
-ADD sendmail.service /etc/service/sendmail/run
 
 # sendmail allow www-data user to send mails
 RUN sed -i 's/#Ft\/etc\/mail\/trusted-users/Ft\/etc\/mail\/trusted-users/' /etc/mail/submit.cf && \
@@ -56,3 +55,7 @@ RUN rm -rf /tmp/* && \
 
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]
+
+#################################
+#### Expose ports.
+EXPOSE 80
