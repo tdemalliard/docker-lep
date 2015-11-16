@@ -54,4 +54,4 @@ CMD ["/sbin/my_init"]
 
 #################################
 #### Expose ports.
-EXPOSE 80
+EXPOSE 80 443
