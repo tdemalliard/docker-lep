@@ -14,18 +14,6 @@ RUN DEBIAN_FRONTEND='noninteractive' \
     php5-fpm \
     nginx
 
-# install mariad
-# touch file: workaround install bug
-RUN mkdir -p /var/lib/mysql && \
-    touch /var/lib/mysql/debian-5.5.flag && \
-    DEBIAN_FRONTEND='noninteractive' \
-    apt-get install -qy \
-    mariadb-server
-
-# workaround to run mysql: missing socket folder
-RUN mkdir /run/mysqld && \
-    chown mysql:root /run/mysqld
-
 
 # install ssmtp
 RUN apt-get install -qy \
@@ -40,7 +28,6 @@ ADD php-fpm.conf /etc/php5/fpm/php-fpm.conf
 ADD www.conf /etc/php5/fpm/pool.d/www.conf
 
 # install service files for runit
-ADD mysqld.service /etc/service/mysqld/run
 ADD php-fpm.service /etc/service/php-fpm/run
 ADD nginx.service /etc/service/nginx/run
 
